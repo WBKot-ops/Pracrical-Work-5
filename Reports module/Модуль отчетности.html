@@ -110,7 +110,6 @@
     </div>
 
     <script>
-        // Пример данных (обычно берутся из базы данных)
         let tasks = [
             {id: 1, title: "Сделать домашку", priority: "high", status: "done", date: "2024-01-15"},
             {id: 2, title: "Купить продукты", priority: "medium", status: "inprogress", date: "2024-01-16"},
@@ -120,7 +119,6 @@
         ];
 
         function showReports() {
-            // Обновляем статистику
             let total = tasks.length;
             let done = tasks.filter(t => t.status === 'done').length;
             let progress = tasks.filter(t => t.status === 'inprogress').length;
@@ -131,7 +129,6 @@
             document.getElementById('progress-tasks').textContent = progress;
             document.getElementById('todo-tasks').textContent = todo;
 
-            // Заполняем таблицу
             let tableBody = document.querySelector('#tasks-table tbody');
             tableBody.innerHTML = '';
             
@@ -159,7 +156,6 @@
             alert(`Выполнено ${done} из ${total} задач (${percent}%)`);
         }
 
-        // Показываем отчеты при загрузке
         showReports();
     </script>
 </body>
