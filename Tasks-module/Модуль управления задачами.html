@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мои задачи</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .header {
+            background: blue;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .task-form {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            background: blue;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .task {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid blue;
+        }
+        .high { border-left-color: red; }
+        .medium { border-left-color: orange; }
+        .low { border-left-color: green; }
+        .status-todo { background: #ffe6e6; }
+        .status-inprogress { background: #fff9e6; }
+        .status-done { background: #e6ffe6; }
+        .filters {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Мои задачи</h1>
+    </div>
+
+    <div class="filters">
+        <input type="text" id="search" placeholder="Поиск задач..." onkeyup="filterTasks()">
+        <select id="status-filter" onchange="filterTasks()">
+            <option value="">Все статусы</option>
+            <option value="todo">К выполнению</option>
+            <option value="inprogress">В работе</option>
+            <option value="done">Выполнено</option>
+        </select>
+    </div>
+
+    <div class="task-form">
+        <h3>Добавить задачу</h3>
+        <input type="text" id="task-title" placeholder="Название задачи">
+        <textarea id="task-desc" placeholder="Описание"></textarea>
+        <select id="task-priority">
+            <option value="low">Низкий</option>
+            <option value="medium">Средний</option>
+            <option value="high">Высокий</option>
+        </select>
+        <button onclick="addTask()">Добавить задачу</button>
+    </div>
+
+    <div id="tasks-list">
+        <!-- Задачи будут здесь -->
+    </div>
+
+    <script>
+        let tasks = [
+            {id: 1, title: "Сделать домашку", desc: "По математике", priority: "high", status: "todo"},
+            {id: 2, title: "Купить продукты", desc: "Хлеб, молоко", priority: "medium", status: "inprogress"},
+            {id: 3, title: "Позвонить другу", desc: "Обсудить проект", priority: "low", status: "done"}
+        ];
+
+        function showTasks() {
+            let html = '';
+            for (let task of tasks) {
+                html += `
+                <div class="task ${task.priority} status-${task.status}">
+                    <h3>${task.title}</h3>
+                    <p>${task.desc}</p>
+                    <p>Приоритет: ${task.priority} | Статус: ${task.status}</p>
+                    <button onclick="changeStatus(${task.id}, 'todo')">К выполнению</button>
+                    <button onclick="changeStatus(${task.id}, 'inprogress')">В работе</button>
+                    <button onclick="changeStatus(${task.id}, 'done')">Выполнено</button>
+                    <button onclick="deleteTask(${task.id})" style="background:red">Удалить</button>
+                </div>`;
+            }
+            document.getElementById('tasks-list').innerHTML = html;
+        }
+
+        function addTask() {
+            let title = document.getElementById('task-title').value;
+            let desc = document.getElementById('task-desc').value;
+            let priority = document.getElementById('task-priority').value;
+            
+            if (title === '') {
+                alert('Введите название задачи');
+                return;
+            }
+
+            let newId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
+            tasks.push({
+                id: newId,
+                title: title,
+                desc: desc,
+                priority: priority,
+                status: 'todo'
+            });
+
+            document.getElementById('task-title').value = '';
+            document.getElementById('task-desc').value = '';
+            showTasks();
+        }
+
+        function changeStatus(taskId, newStatus) {
+            let task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.status = newStatus;
+                showTasks();
+            }
+        }
+
+        function deleteTask(taskId) {
+            if (confirm('Удалить задачу?')) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                showTasks();
+            }
+        }
+
+        function filterTasks() {
+            let search = document.getElementById('search').value.toLowerCase();
+            let status = document.getElementById('status-filter').value;
+            
+            let filtered = tasks.filter(task => {
+                let matchesSearch = task.title.toLowerCase().includes(search) || 
+                                  task.desc.toLowerCase().includes(search);
+                let matchesStatus = status === '' || task.status === status;
+                return matchesSearch && matchesStatus;
+            });
+
+            let html = '';
+            for (let task of filtered) {
+                html += `
+                <div class="task ${task.priority} status-${task.status}">
+                    <h3>${task.title}</h3>
+                    <p>${task.desc}</p>
+                    <p>Приоритет: ${task.priority} | Статус: ${task.status}</p>
+                    <button onclick="changeStatus(${task.id}, 'todo')">К выполнению</button>
+                    <button onclick="changeStatus(${task.id}, 'inprogress')">В работе</button>
+                    <button onclick="changeStatus(${task.id}, 'done')">Выполнено</button>
+                    <button onclick="deleteTask(${task.id})" style="background:red">Удалить</button>
+                </div>`;
+            }
+            document.getElementById('tasks-list').innerHTML = html;
+        }
+
+        // Показываем задачи при загрузке
+        showTasks();
+    </script>
+</body>
+</html>
