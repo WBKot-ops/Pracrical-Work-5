@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Вход и регистрация</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .form-box {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px gray;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            background: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .tabs {
+            display: flex;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .active {
+            background: blue;
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <div class="tabs">
+            <div class="tab active" onclick="showLogin()">Вход</div>
+            <div class="tab" onclick="showRegister()">Регистрация</div>
+        </div>
+
+        <div id="login-form">
+            <h2>Вход</h2>
+            <input type="text" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Пароль">
+            <button onclick="login()">Войти</button>
+        </div>
+
+        <div id="register-form" class="hidden">
+            <h2>Регистрация</h2>
+            <input type="text" id="reg-name" placeholder="Имя">
+            <input type="text" id="reg-email" placeholder="Email">
+            <input type="password" id="reg-password" placeholder="Пароль">
+            <button onclick="register()">Зарегистрироваться</button>
+        </div>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('register-form').classList.add('hidden');
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.querySelectorAll('.tab')[1].classList.remove('active');
+        }
+
+        function showRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+            document.querySelectorAll('.tab')[0].classList.remove('active');
+            document.querySelectorAll('.tab')[1].classList.add('active');
+        }
+
+        function login() {
+            let email = document.getElementById('login-email').value;
+            let password = document.getElementById('login-password').value;
+            alert('Вход выполнен для: ' + email);
+            window.location.href = 'tasks.html';
+        }
+
+        function register() {
+            let name = document.getElementById('reg-name').value;
+            let email = document.getElementById('reg-email').value;
+            let password = document.getElementById('reg-password').value;
+            alert('Регистрация успешна для: ' + name);
+            showLogin();
+        }
+    </script>
+</body>
+</html>
