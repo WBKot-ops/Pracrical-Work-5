@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Отчеты</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .header {
+            background: blue;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: white;
+            padding: 15px;
+            flex: 1;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .report-table {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f2f2f2;
+        }
+        .export-buttons {
+            margin-top: 20px;
+        }
+        button {
+            background: blue;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Отчеты по задачам</h1>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div>Всего задач</div>
+            <div class="stat-number" id="total-tasks">0</div>
+        </div>
+        <div class="stat-box">
+            <div>Выполнено</div>
+            <div class="stat-number" id="done-tasks">0</div>
+        </div>
+        <div class="stat-box">
+            <div>В работе</div>
+            <div class="stat-number" id="progress-tasks">0</div>
+        </div>
+        <div class="stat-box">
+            <div>Не начато</div>
+            <div class="stat-number" id="todo-tasks">0</div>
+        </div>
+    </div>
+
+    <div class="report-table">
+        <h3>Все задачи</h3>
+        <table id="tasks-table">
+            <thead>
+                <tr>
+                    <th>Задача</th>
+                    <th>Приоритет</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Данные будут здесь -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="export-buttons">
+        <button onclick="exportPDF()">Сохранить как PDF</button>
+        <button onclick="exportExcel()">Экспорт в Excel</button>
+        <button onclick="showStats()">Показать статистику</button>
+    </div>
+
+    <script>
+        let tasks = [
+            {id: 1, title: "Сделать домашку", priority: "high", status: "done", date: "2024-01-15"},
+            {id: 2, title: "Купить продукты", priority: "medium", status: "inprogress", date: "2024-01-16"},
+            {id: 3, title: "Позвонить другу", priority: "low", status: "todo", date: "2024-01-14"},
+            {id: 4, title: "Написать отчет", priority: "high", status: "done", date: "2024-01-13"},
+            {id: 5, title: "Починить компьютер", priority: "medium", status: "inprogress", date: "2024-01-17"}
+        ];
+
+        function showReports() {
+            let total = tasks.length;
+            let done = tasks.filter(t => t.status === 'done').length;
+            let progress = tasks.filter(t => t.status === 'inprogress').length;
+            let todo = tasks.filter(t => t.status === 'todo').length;
+
+            document.getElementById('total-tasks').textContent = total;
+            document.getElementById('done-tasks').textContent = done;
+            document.getElementById('progress-tasks').textContent = progress;
+            document.getElementById('todo-tasks').textContent = todo;
+
+            let tableBody = document.querySelector('#tasks-table tbody');
+            tableBody.innerHTML = '';
+            
+            for (let task of tasks) {
+                let row = tableBody.insertRow();
+                row.insertCell(0).textContent = task.title;
+                row.insertCell(1).textContent = task.priority;
+                row.insertCell(2).textContent = task.status;
+                row.insertCell(3).textContent = task.date;
+            }
+        }
+
+        function exportPDF() {
+            alert('Отчет сохранен как PDF файл');
+        }
+
+        function exportExcel() {
+            alert('Данные экспортированы в Excel');
+        }
+
+        function showStats() {
+            let total = tasks.length;
+            let done = tasks.filter(t => t.status === 'done').length;
+            let percent = Math.round((done / total) * 100);
+            alert(`Выполнено ${done} из ${total} задач (${percent}%)`);
+        }
+
+        showReports();
+    </script>
+</body>
+</html>
